@@ -1,6 +1,5 @@
-setwd("C:/Users/amc27/Dropbox/Rice docs/3_docs_clases/1_2016_fall/justin work/interactionTest")
+setwd("C:/Users/amc27/Dropbox/Rice docs/3_docs_clases/1_2016_fall/justin work/nyhan-reifler-vaccine-replication/Andy R code vaccines")
 
-dir.create("imagesvaccines")
 #install.packages(c("car", "MASS", "Hmisc","gmodels", "xlsx", "foreign", "ggplot2", "survey", "questionr"))
 library(car)
 library(MASS)
@@ -85,7 +84,7 @@ figure3<-ggplot(getvaxtable, aes(Var1, Freq))+
         ylab("Percent")+
         ggtitle("Likelihood of Vaccination")
 figure3
-ggsave("imagesvaccines\\figure3.pdf")
+ggsave("figure3.pdf")
 dev.off()
 
 
@@ -112,7 +111,7 @@ figure2<-ggplot(vaxunsafetable, aes(Var1, Freq))+
         ylab("Percent")+
         ggtitle("Perceived safety of flu vaccine")
 figure2
-ggsave("imagesvaccines\\figure2.pdf")
+ggsave("figure2.pdf")
 dev.off()
 
 
@@ -139,7 +138,7 @@ figure1<-ggplot(vaxgivesflutable, aes(Var1, Freq))+
         ylab("Percent")+
         ggtitle("Vaccine can give you the flu")
 figure1
-ggsave("imagesvaccines\\figure1.pdf")
+ggsave("figure1.pdf")
 dev.off()
 
 #=======================
@@ -351,7 +350,7 @@ figure4<-ggplot(predmeanCIlow, aes(names,mean))+
         ggtitle("Vaccine can give you flu")+
         ylab("")
 figure4
-ggsave("imagesvaccines\\figure4.pdf")
+ggsave("figure4.pdf")
 dev.off()
 
 
@@ -376,7 +375,7 @@ figure5<-ggplot(predmeanCIhigh, aes(names,mean))+
         ggtitle("Flu vaccine unsafe")+ 
         ylab("")
 figure5
-ggsave("imagesvaccines\\figure5.pdf")
+ggsave("figure5.pdf")
 dev.off()
 
 
@@ -523,7 +522,7 @@ figure6<-ggplot(predmeanCIlow, aes(names,mean))+
         ylab("")
 
 figure6
-ggsave("imagesvaccines\\figure6.pdf")
+ggsave("figure6.pdf")
 dev.off()
 
 
@@ -548,7 +547,7 @@ figure7<-ggplot(predmeanCIhigh, aes(names,mean))+
         ggtitle("Flu vaccine unsafe")+
         ylab("")
 figure7
-ggsave("imagesvaccines\\figure7.pdf")
+ggsave("figure7.pdf")
 dev.off()
 
 
@@ -695,7 +694,7 @@ figure8<-ggplot(predmeanCIlow, aes(names,mean))+
         ylab("")
 
 figure8
-ggsave("imagesvaccines\\figure8.pdf")
+ggsave("figure8.pdf")
 dev.off()
 
 
@@ -720,7 +719,7 @@ figure9<-ggplot(predmeanCIhigh, aes(names,mean))+
         ggtitle("Likely to get flu vaccine")+
         ylab("")
 figure9
-ggsave("imagesvaccines\\figure9.pdf")
+ggsave("figure9.pdf")
 dev.off()
 
 

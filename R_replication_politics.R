@@ -1,6 +1,6 @@
-#setwd("C:/Users/amc27/Dropbox/Rice docs/3_docs_clases/1_2016_fall/justin work/interactionTest")
+#setwd("C:/Users/amc27/Desktop/Replication_project")
 
-dir.create("politicalimages")
+dir.create("imagespolitics")
 
 #install.packages(c("car", "MASS", "Hmisc","gmodels", "xlsx", "foreign", "ggplot2", "survey", "questionr"))
 library(foreign)
@@ -58,29 +58,45 @@ covb2b3<- vcov(model.interact)[3,6]
 
 conb<- b1+b3*MV
 conse<- sqrt(varb1+varb3*(MV^2)+2*covb1b3*MV)
-a<- 1.96*conse
+a<- 1.96*conse 
 upper<- conb+a
 lower<- conb-a
 
-values.frame<- data.frame(conb, conse, a, upper, lower, MV)
+### add interaction effects ###
 
+fdrInteraction(conb, conse, df=model.interact$df, level=0.95) #2.215212
+upper2<- conb + 2.215212 * conse
+lower2<- conb - 2.215212 * conse
+
+values.frame<- data.frame(conb, conse, a, upper, lower, MV, upper2, lower2 )
 
 values.frame$MVname<- as.factor(values.frame$MV)
 levels(values.frame$MVname)<- c("Very Liberal", "Liberal", "Leans Left", "Center", "Lean Right", "Conservative", "Very Conservative")
 
-
 # pretty good plot but need to annotate better
-
 x11()
 figure1<-ggplot(values.frame, aes(MV, conb))+
         geom_ribbon(aes(ymin=lower, ymax=upper), fill="black", alpha=0.1)+
         geom_hline(yintercept=0)+ 
         geom_point(aes(MV,conb))+ 
         geom_smooth(aes(MV,conb), method="lm", col="black", lty=2, lwd=0.5)+
-        ylab("")+ xlab("(-3) Very Liberal --- (3) Very Conservative") + ggtitle("Effect of correction on WMD misperception
-Estimated marginal effect by ideology: Fall 2005") +theme_bw()
+        ylab("Marginal effect on misperception")+ 
+        xlab("(-3) Very Liberal --- (3) Very Conservative") +
+        ggtitle("Effect of correction on WMD misperception 
+Estimated marginal effect by ideology: Fall 2005") +
+        ylim(-3,3)+
+        theme_bw()
 figure1
-ggsave("politicalimages\\Figure_1.pdf")
+ggsave("imagespolitics\\Figure_1.pdf")
+dev.off()
+
+
+### add the interaction effects to the graph###
+x11()
+figure1.1<- figure1+ geom_smooth(aes(MV, upper2), col="black", lty=2, se=FALSE) + 
+        geom_smooth(aes(MV, lower2), col="black", lty=2,se=FALSE)
+figure1.1
+ggsave("imagespolitics\\Figure_1.1.pdf")
 dev.off()
 
 #raw data#
@@ -103,7 +119,7 @@ with(conservatives, cor(as.numeric(iraqdecision), wmds, use="pairwise.complete.o
 # STUDY 2
 #
 #=======================================
-
+rm(list=ls(all=TRUE))
 #==================
 #IMPORT AND CLEAN DATA
 #==================
@@ -211,7 +227,21 @@ lower2<-conb1-ar2
 
 zero<-0
 
-values.frame<-data.frame(upper0,lower0,MV, conb0)
+### include interaction test###
+
+fdrInteraction(conb0, conse0, df=model.interact$df, level=0.95) #2.115547
+upperinteract0<- conb0 + 2.115547 * conse0
+lowerinteract0<- conb0 - 2.115547 * conse0
+
+fdrInteraction(conb1, conse1, df=model.interact$df, level=0.95) #2.720202
+upperinteract1<- conb1 + 2.720202 * conse1
+lowerinteract1<- conb1 - 2.720202 * conse1
+
+###graphs###
+
+##figure2##
+
+values.frame<-data.frame(upper0,lower0,MV, conb0, upperinteract0, lowerinteract0)
 
 x11()
 figure2<-ggplot(values.frame, aes(MV, conb0))+
@@ -222,12 +252,24 @@ figure2<-ggplot(values.frame, aes(MV, conb0))+
         ylab("Marginal effect on misperception")+ 
         xlab("(-3) Very Liberal --- (3) Very Conservative") +
         ggtitle("Iraq not most important") +theme_bw()+
-        ylim(-4,4)
+        ylim(-5,5)
 figure2
-ggsave("politicalimages\\Figure_2.pdf")
+ggsave("imagespolitics\\Figure_2.pdf")
 dev.off()
 
-values.frame<-data.frame(upper1,lower1,MV, conb1)
+###include interactions in figure###
+
+x11()
+figure2.2<- figure2+ geom_smooth(aes(MV, upperinteract0), col="black", lty=2, se=FALSE) + 
+        geom_smooth(aes(MV, lowerinteract0), col="black", lty=2,se=FALSE)
+figure2.2
+ggsave("imagespolitics\\Figure_2.2.pdf")
+dev.off()
+
+
+
+##figure3##
+values.frame<-data.frame(upper1,lower1,MV, conb1, upperinteract1, lowerinteract1)
 
 x11()
 figure3<-ggplot(values.frame, aes(MV, conb1))+
@@ -237,10 +279,23 @@ figure3<-ggplot(values.frame, aes(MV, conb1))+
         geom_smooth(aes(MV,conb1), method="lm", col="black", lty=2, lwd=0.5)+
         ylab("Marginal effect on misperception")+ xlab("(-3) Very Liberal --- (3) Very Conservative") + 
         ggtitle("Iraq most important")+ theme_bw()+
-        ylim(-4,4)
+        ylim(-5,5)
 figure3
-ggsave("politicalimages\\Figure_3.pdf")
+ggsave("imagespolitics\\Figure_3.pdf")
 dev.off()
+
+###include interactions in figure###
+
+x11()
+figure3.3<- figure3+ geom_smooth(aes(MV, upperinteract1), col="black", lty=2, se=FALSE) + 
+        geom_smooth(aes(MV, lowerinteract1), col="black", lty=2,se=FALSE)
+figure3.3
+ggsave("imagespolitics\\Figure_3.3.pdf")
+dev.off()
+
+
+
+
 
 #estimated marginal effect & 90% CI for most strongly committed conservatives
 data.frame(MV, conb1, lower2, upper2)[7,]
@@ -252,6 +307,7 @@ t.test(spring06$iraqwmd[spring06$ideolcen<0 & spring06$iraqcorr==0], spring06$ir
 #====================================
 #tax cuts/ revenue
 #====================================
+rm(list=ls(all=TRUE))
 spring06<- read.dta("spring06-data.dta")
 
 spring06$iraqwmd<-as.numeric(spring06$iraqwmd)
@@ -287,7 +343,13 @@ a <- 1.96*conse
 upper <- conb+a
 lower <- conb-a
 
-values.frame<-data.frame(MV, conb, upper, lower)
+###include interactions###
+
+fdrInteraction(conb, conse, df=model.interact$df, level=0.95) #2.719562
+upperinteract<- conb + 2.719562 * conse
+lowerinteract<- conb - 2.719562 * conse
+
+values.frame<-data.frame(MV, conb, upper, lower, upperinteract, lowerinteract)
 
 x11()
 figure4<-ggplot(values.frame, aes(MV, conb))+
@@ -298,9 +360,18 @@ figure4<-ggplot(values.frame, aes(MV, conb))+
         ylab("Marginal effect on misperception")+ xlab("(-3) Very Liberal --- (3) Very Conservative") + 
         ggtitle("Effect of correction on tax/revenue misperception
 Estimated marginal effect by ideology: Spring 2006")+theme_bw()+
-        ylim(-1,1.5)
+        ylim(-2,2)
 figure4
-ggsave("politicalimages\\Figure_4.pdf")
+ggsave("imagespolitics\\Figure_4.pdf")
+dev.off()
+
+###include interactions in graph###
+
+x11()
+figure4.4<- figure4+ geom_smooth(aes(MV, upperinteract), col="black", lty=2, se=FALSE) + 
+        geom_smooth(aes(MV, lowerinteract), col="black", lty=2,se=FALSE)
+figure4.4
+ggsave("imagespolitics\\Figure_4.4.pdf")
 dev.off()
 
 #raw data
@@ -313,6 +384,7 @@ CrossTable(notconservatives$binarytc, notconservatives$taxcutcorr, prop.r=F, pro
 #====================================
 #Stem Cell Ban
 #====================================
+rm(list=ls(all=TRUE))
 spring06<- read.dta("spring06-data.dta")
 
 spring06$iraqwmd<-as.numeric(spring06$iraqwmd)
@@ -348,6 +420,13 @@ a <- 1.96*conse
 upper <- conb+a
 lower <- conb-a
 
+###include interactions###
+
+fdrInteraction(conb, conse, df=model.interact$df, level=0.95) #2.719562
+upperinteract<- conb + 2.719562 * conse
+lowerinteract<- conb - 2.719562 * conse
+
+
 values.frame<- data.frame(MV, conb, lower, upper)
 
 x11()
@@ -358,13 +437,21 @@ figure5<-ggplot(values.frame, aes(MV, conb))+
         geom_smooth(aes(MV,conb), method="lm", col="black", lty=2, lwd=0.5)+
         ylab("Marginal effect on misperception")+ xlab("(-3) Very Liberal --- (3) Very Conservative") + 
         ggtitle("Effect of correction on tax/revenue misperception
-                Estimated marginal effect by ideology: Spring 2006")+theme_bw()+
-        ylim(-2,1)
+Estimated marginal effect by ideology: Spring 2006")+theme_bw()+
+        ylim(-3,3)
 figure5
-ggsave("politicalimages\\Figure_5.pdf")
+ggsave("imagespolitics\\Figure_5.pdf")
 dev.off()
 
 
+###include interactions in graph###
+
+x11()
+figure5.5<- figure5+ geom_smooth(aes(MV, upperinteract), col="black", lty=2, se=FALSE) + 
+        geom_smooth(aes(MV, lowerinteract), col="black", lty=2,se=FALSE)
+figure5.5
+ggsave("imagespolitics\\Figure_5.5.pdf")
+dev.off()
 
 
 
