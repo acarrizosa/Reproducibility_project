@@ -14,7 +14,7 @@ all plots for this file go into "images politics"
 
 "R_Run_All" just sources all the other files.  So you can delete all the pdfs in the images files if you'd like, and run everything from here and they'd repopulate without errors. 
 
-Both Nyhan-Reifler files have the STATA files, and the R "translations" I saved the transations here, to the point where they perfectly mimmic the STATA do.files. 
+Both Nyhan-Reifler files have the STATA files, and the R "translations." I saved the translations here to the point where they perfectly mimmic the STATA do.files. 
 
 "garbage" should be self explanatory. 
 
