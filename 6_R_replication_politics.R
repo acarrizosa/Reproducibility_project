@@ -7,6 +7,7 @@ library(foreign)
 library(ggplot2)
 library(Hmisc)
 library(gmodels)
+library(interactionTest)
 rm(list=ls(all=TRUE))
 #=======================================
 #
@@ -19,7 +20,6 @@ rm(list=ls(all=TRUE))
 #==================
 fall05<-read.dta("fall05-data.dta")
 
-table(spring06$issue_iraq) #the error only affects the value labels, not the data itself.
 
 #1=strongly disagree 5=strongly agree
 fall05$wmds<- as.numeric(fall05$wmds)

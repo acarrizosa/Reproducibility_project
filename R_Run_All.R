@@ -7,4 +7,4 @@ source("5_R_replication_vaccines(appendix).R")
 
 
 
-source("R_replication_politics.R")
+source("6_R_replication_politics.R")

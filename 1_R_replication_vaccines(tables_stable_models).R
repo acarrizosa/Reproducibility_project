@@ -9,6 +9,7 @@ library(ggplot2)
 library(gmodels)
 library(xlsx)
 library(survey)
+library(interactionTest)
 rm(list=ls(all=TRUE))
 #=======================================
 #
